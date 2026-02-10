@@ -25,12 +25,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1^j-x3o@b78ydzp0)5@f32y7)uu&u&r579zv4pot)ym4&owf6y'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-1^j-x3o@b78ydzp0)5@f32y7)uu&u&r579zv4pot)ym4&owf6y')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*']  # Configure appropriately for production
+# SECURITY WARNING: Configure ALLOWED_HOSTS appropriately for production
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',') if os.getenv('ALLOWED_HOSTS') else ['*']
 
 
 # Application definition
@@ -169,6 +170,11 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
-# Allow CORS for all origins in development (disable in production)
+# SECURITY: Allow CORS for all origins ONLY in development
+# In production, ensure DEBUG=False and configure CORS_ALLOWED_ORIGINS properly
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
+else:
+    # In production, CORS_ALLOWED_ORIGINS should be set via environment variable
+    # or explicitly configured with trusted domains only
+    CORS_ALLOW_ALL_ORIGINS = False
