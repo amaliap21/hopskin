@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     # Local apps
-    'habits',
+    'orbitb',
 ]
 
 MIDDLEWARE = [
