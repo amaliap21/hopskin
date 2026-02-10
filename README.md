@@ -117,11 +117,7 @@ npm start
 
 3. Update `.env` file:
 ```
-SUPABASE_DB_NAME=postgres
-SUPABASE_DB_USER=postgres
-SUPABASE_DB_PASSWORD=your_password
-SUPABASE_DB_HOST=db.xxxxxxxxxxxxx.supabase.co
-SUPABASE_DB_PORT=5432
+DATABASE_URL=postgresql://<username>:<password>@<host>:<port>/<database>
 ```
 
 4. Run migrations to create tables in Supabase:

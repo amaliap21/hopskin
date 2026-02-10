@@ -85,16 +85,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 # Supabase PostgreSQL configuration
+import dj_database_url
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('SUPABASE_DB_NAME', 'postgres'),
-        'USER': os.getenv('SUPABASE_DB_USER', 'postgres'),
-        'PASSWORD': os.getenv('SUPABASE_DB_PASSWORD', ''),
-        'HOST': os.getenv('SUPABASE_DB_HOST', 'localhost'),
-        'PORT': os.getenv('SUPABASE_DB_PORT', '5432'),
-    }
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
+        
 
 # Fallback to SQLite for development if Supabase credentials not provided
 if not os.getenv('SUPABASE_DB_PASSWORD'):
