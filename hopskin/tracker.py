@@ -143,7 +143,13 @@ class HabitTracker:
         # Calculate streak (consecutive days with completions)
         streak = 0
         current_date = datetime.now().date()
-        while True:
+        # Check backwards from today, but limit to the tracking period and habit creation date
+        earliest_date = max(
+            habit.created_at.date(),
+            (datetime.now() - timedelta(days=days)).date()
+        )
+        
+        while current_date >= earliest_date:
             day_logs = [
                 log for log in logs 
                 if log.completed_at.date() == current_date
