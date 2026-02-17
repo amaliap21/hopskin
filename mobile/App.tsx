@@ -10,27 +10,30 @@ type Screen = "welcome" | "login" | "signup" | "forgot";
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("welcome");
 
-  const renderScreen = () => {
-    switch (currentScreen) {
-      case "welcome":
-        return <WelcomeScreen />;
-      case "login":
-        return <LoginScreen />;
-      case "signup":
-        return <SignUpScreen />;
-      case "forgot":
-        return <ForgotPasswordScreen />;
-      default:
-        return <WelcomeScreen />;
-    }
-  };
+  // const renderScreen = () => {
+  //   switch (currentScreen) {
+  //     case "welcome":
+  //       return <WelcomeScreen />;
+  //     case "login":
+  //       return <LoginScreen />;
+  //     case "signup":
+  //       return <SignUpScreen />;
+  //     case "forgot":
+  //       return <ForgotPasswordScreen />;
+  //     default:
+  //       return <WelcomeScreen />;
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
-      {renderScreen()}
+      {/* {renderScreen()} */}
+      <SignUpScreen />
+      {/* <LoginScreen /> */}
+      {/* <ForgotPasswordScreen /> */}
 
       {/* Navigation Menu - for demo purposes */}
-      <View style={styles.navMenu}>
+      {/* <View style={styles.navMenu}>
         <TouchableOpacity
           style={[
             styles.navButton,
@@ -67,7 +70,7 @@ export default function App() {
         >
           <Text style={styles.navText}>Forgot PW</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 }
