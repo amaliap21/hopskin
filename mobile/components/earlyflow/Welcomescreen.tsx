@@ -8,7 +8,7 @@ export default function WelcomeScreen() {
       <StatusBar style="dark" />
       <View style={styles.logoContainer}>
         <View style={styles.circle}></View>
-        <Image source={require("../assets/logo.png")} style={styles.logo} />
+        <Image source={require("../../assets/logo.png")} style={styles.logo} />
       </View>
       <Text style={styles.tagline}>Your circle of recovery</Text>
     </View>

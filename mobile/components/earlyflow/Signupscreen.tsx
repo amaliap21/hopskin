@@ -13,7 +13,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import { SvgXml } from "react-native-svg";
-import Logo from "./icon/Logoscreen";
+import Logo from "../icon/Logoscreen";
 
 const { width, height } = Dimensions.get("window");
 
