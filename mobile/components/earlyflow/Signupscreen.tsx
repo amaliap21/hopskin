@@ -9,11 +9,14 @@ import {
   Platform,
   ScrollView,
   Dimensions,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import { SvgXml } from "react-native-svg";
 import Logo from "../icon/Logoscreen";
+import { registerUser } from '../../services/supabase';
 
 const { width, height } = Dimensions.get("window");
 
@@ -64,12 +67,42 @@ const waveSvg = `
 </svg>
 `;
 
-export default function SignUpScreen() {
+export default function SignUpScreen({ onNavigateToLogin, onSignUpSuccess }: {
+  onNavigateToLogin?: () => void;
+  onSignUpSuccess?: () => void;
+}) {
   const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSignup = async () => {
+    if (!fullName.trim()) {
+      Alert.alert('Error', 'Please enter your full name.');
+      return;
+    }
+    if (!email.trim()) {
+      Alert.alert('Error', 'Please enter your email.');
+      return;
+    }
+    if (!password.trim() || password.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters.');
+      return;
+    }
+    setLoading(true);
+    try {
+      await registerUser(email.trim(), password, "user", phoneNumber.trim());
+      Alert.alert('Success', 'Account created! Please check your email to verify your account.', [
+        { text: 'OK', onPress: () => onSignUpSuccess?.() },
+      ]);
+    } catch (error) {
+      Alert.alert('Sign Up Failed', (error as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -164,14 +197,23 @@ export default function SignUpScreen() {
           </View>
 
           {/* Sign Up Button */}
-          <TouchableOpacity style={styles.signUpButton} activeOpacity={0.8}>
-            <Text style={styles.signUpButtonText}>Sign Up</Text>
+          <TouchableOpacity
+            style={[styles.signUpButton, loading && { opacity: 0.7 }]}
+            activeOpacity={0.8}
+            onPress={handleSignup}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.signUpButtonText}>Sign Up</Text>
+            )}
           </TouchableOpacity>
 
           {/* Footer */}
           <View style={styles.footer}>
             <Text style={styles.footerText}>Already have an account? </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onNavigateToLogin}>
               <Text style={styles.logInLink}>Log In</Text>
             </TouchableOpacity>
           </View>

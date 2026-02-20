@@ -9,11 +9,14 @@ import {
   Platform,
   ScrollView,
   Dimensions,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import { SvgXml } from "react-native-svg";
 import Logo from "../icon/Logoscreen";
+import { forgotPassword } from '../../services/supabase';
 
 const { width, height } = Dimensions.get("window");
 
@@ -73,6 +76,24 @@ export default function ForgotPasswordScreen() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleForgotPassword = async () => {
+    if (!email.trim()) {
+      Alert.alert('Error', 'Please enter your email address.');
+      return;
+    }
+    setLoading(true);
+    try {
+      await forgotPassword(email.trim());
+      Alert.alert('Email Sent', 'A password reset link has been sent to your email. Please check your inbox.');
+    } catch (error) {
+      Alert.alert('Error', (error as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -166,6 +187,33 @@ export default function ForgotPasswordScreen() {
             {/* Create New Password Button */}
             <TouchableOpacity style={styles.createButton} activeOpacity={0.8}>
               <Text style={styles.createButtonText}>Create New Password</Text>
+            </TouchableOpacity>
+
+            <View style={styles.emailInputGroup}>
+              <Text style={styles.label}>Email</Text>
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={styles.passwordInput}
+                  placeholder="example@example.com"
+                  placeholderTextColor="#4FA8B8"
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                />
+              </View>
+            </View>
+
+            <TouchableOpacity
+              style={[styles.forgotPasswordButton, loading && { opacity: 0.7 }]}
+              activeOpacity={0.8}
+              onPress={handleForgotPassword}
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.forgotPasswordButtonText}>Forgot Password</Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>
@@ -273,6 +321,30 @@ const styles = StyleSheet.create({
     marginTop: scaleH(isSmallDevice ? 18 : 28),
   },
   createButtonText: {
+    color: "#FFFFFF",
+    fontSize: scaleFont(18),
+    fontWeight: "600",
+  },
+
+  emailInputGroup: {
+    marginBottom: scaleH(isSmallDevice ? 16 : 22),
+  },
+  emailInput: {
+    flex: 1,
+    paddingHorizontal: scaleW(18),
+    paddingVertical: scaleH(isSmallDevice ? 13 : 16),
+    fontSize: scaleFont(isSmallDevice ? 14 : 16),
+    color: "#4FA8B8",
+  },
+
+  forgotPasswordButton: {
+    backgroundColor: "#2C3E50",
+    borderRadius: scaleW(12),
+    paddingVertical: scaleH(isSmallDevice ? 14 : 16),
+    alignItems: "center",
+    marginTop: scaleH(isSmallDevice ? 18 : 28),
+  },
+  forgotPasswordButtonText: {
     color: "#FFFFFF",
     fontSize: scaleFont(18),
     fontWeight: "600",

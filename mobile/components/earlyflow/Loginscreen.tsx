@@ -9,12 +9,14 @@ import {
   Platform,
   Dimensions,
   ScrollView,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import { SvgXml } from "react-native-svg";
 import Logo from "../icon/Logoscreen";
-
+import { loginUser } from '../../services/supabase';
 
 const { width, height } = Dimensions.get("window");
 
@@ -73,12 +75,36 @@ const waveSvg = `
 type LoginScreenProps = {
   onSignUp?: () => void;
   onForgotPassword?: () => void;
+  onLoginSuccess?: () => void;
 };
 
-export default function LoginScreen({ onSignUp, onForgotPassword }: LoginScreenProps) {
+export default function LoginScreen({ onSignUp, onForgotPassword, onLoginSuccess }: LoginScreenProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email.trim()) {
+      Alert.alert('Error', 'Please enter your email.');
+      return;
+    }
+    if (!password.trim()) {
+      Alert.alert('Error', 'Please enter your password.');
+      return;
+    }
+    setLoading(true);
+    try {
+      await loginUser(email.trim(), password);
+      Alert.alert('Success', 'Login successful!', [
+        { text: 'OK', onPress: () => onLoginSuccess?.() },
+      ]);
+    } catch (error) {
+      Alert.alert('Login Failed', (error as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -158,10 +184,15 @@ export default function LoginScreen({ onSignUp, onForgotPassword }: LoginScreenP
 
             {/* Login Button */}
             <TouchableOpacity
-              style={styles.loginButton}
-              onPress={() => {}}
+              style={[styles.loginButton, loading && { opacity: 0.7 }]}
+              onPress={handleLogin}
+              disabled={loading}
             >
-              <Text style={styles.loginButtonText}>Log In</Text>
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.loginButtonText}>Log In</Text>
+              )}
             </TouchableOpacity>
 
             {/* Footer */}

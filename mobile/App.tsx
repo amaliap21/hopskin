@@ -27,7 +27,8 @@ type Screen =
   | "onboarding_monitor"
   | "onboarding_support"
   | "onboarding_realtime"
-  | "choose_role";
+  | "choose_role"
+  | "home";
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("splash");
@@ -91,12 +92,20 @@ export default function App() {
         <LoginScreen
           onSignUp={() => setCurrentScreen("signup")}
           onForgotPassword={() => setCurrentScreen("forgot")}
+          onLoginSuccess={() => setCurrentScreen("home")}
         />
       );
     } else if (currentScreen === "signup") {
-      return <SignUpScreen />;
+      return (
+        <SignUpScreen
+          onNavigateToLogin={() => setCurrentScreen("login")}
+          onSignUpSuccess={() => setCurrentScreen("login")}
+        />
+      );
     } else if (currentScreen === "forgot") {
       return <ForgotPasswordScreen />;
+    } else if (currentScreen === "home") {
+      return <WelcomeScreen />;
     } else if (currentScreen === "welcome") {
       return <WelcomeScreen />;
     }
