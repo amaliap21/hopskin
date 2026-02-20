@@ -15,6 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { SvgXml } from "react-native-svg";
 import Logo from "../icon/Logoscreen";
 
+
 const { width, height } = Dimensions.get("window");
 
 // ─── Responsive Scaling ────────────────────────────────────
@@ -69,7 +70,12 @@ const waveSvg = `
 </svg>
 `;
 
-export default function LoginScreen() {
+type LoginScreenProps = {
+  onSignUp?: () => void;
+  onForgotPassword?: () => void;
+};
+
+export default function LoginScreen({ onSignUp, onForgotPassword }: LoginScreenProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -142,20 +148,26 @@ export default function LoginScreen() {
                   />
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity style={styles.forgotPassword}>
-                <Text style={styles.forgotPasswordText}>Forget Password</Text>
+              <TouchableOpacity
+                style={styles.forgotPassword}
+                onPress={onForgotPassword}
+              >
+                <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
               </TouchableOpacity>
             </View>
 
             {/* Login Button */}
-            <TouchableOpacity style={styles.loginButton} activeOpacity={0.8}>
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={() => {}}
+            >
               <Text style={styles.loginButtonText}>Log In</Text>
             </TouchableOpacity>
 
             {/* Footer */}
             <View style={styles.footer}>
               <Text style={styles.footerText}>Don't have an account? </Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={onSignUp}>
                 <Text style={styles.signUpLink}>Sign Up</Text>
               </TouchableOpacity>
             </View>

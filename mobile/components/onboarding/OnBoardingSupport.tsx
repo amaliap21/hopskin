@@ -133,21 +133,21 @@ const styles = StyleSheet.create({
 
   // Title
   title: {
-    fontSize: scaleFont(isSmallDevice ? 36 : 40),
+    fontSize: scaleFont(isSmallDevice ? 30 : 32),
     letterSpacing: 1.6,
     fontWeight: "800",
     color: "#58A4B0",
-    lineHeight: scaleFont(isSmallDevice ? 44 : 52),
+    lineHeight: scaleFont(isSmallDevice ? 38 : 42),
     marginBottom: scaleH(10),
     fontFamily: "Be Vietnam Pro",
   },
 
   // Description
   description: {
-    fontSize: scaleFont(isSmallDevice ? 15 : 21),
+    fontSize: scaleFont(isSmallDevice ? 13 : 17),
     fontFamily: "League Spartan",
     color: "#1E1E1E",
-    lineHeight: scaleFont(isSmallDevice ? 22 : 26),
+    lineHeight: scaleFont(isSmallDevice ? 20 : 24),
     fontWeight: "500",
     marginBottom: scaleH(isSmallDevice ? 18 : 22),
   },
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   buttonRow: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    paddingTop: scaleH(5),
+    paddingTop: scaleH(10),
   },
   nextButton: {
     flexDirection: "row",
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   },
   nextButtonText: {
     color: "#FFFFFF",
-    fontSize: scaleFont(18),
+    fontSize: scaleFont(16),
     fontWeight: "600",
   },
 });
